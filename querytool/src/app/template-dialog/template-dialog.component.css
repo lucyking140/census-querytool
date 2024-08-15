@@ -1,0 +1,29 @@
+.dialog-content {
+    max-height: none;
+    overflow: visible;
+    white-space: pre-wrap;
+}
+
+.loading-dialog-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mat-dialog-container {
+    max-height: 80 vh;
+    overflow: visible;
+}
+
+.mat-dialog-title {
+    word-break: break-word;
+}
+
+.mat-dialog-content{
+    white-space: pre-wrap;
+    overflow-x: hidden !important;
+}
+
+.dialog-content .mat-dialog-container{
+    overflow-x: hidden !important;
+}

@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<!-- Top of the page search bar -->
+<div class="search-bar" *ngIf="level === 1 && data.length > 0">
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Select parameter name or categories </mat-label>
+          <input type="text"
+                 placeholder="Search by name or category"
+                 aria-label="Search by name or category"
+                 matInput
+                 [formControl]="searchControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+              <mat-option
+                *ngFor="let option of current_options; trackBy: trackByFn"
+                [value]="option" 
+                (click)="searchSelect(option)"
+              > {{option["name"]}} ({{ option["category"]}})</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+</div>    
+
+<!-- Actual parameter list -->
+<ul class="dropdown-menu" [ngStyle]="{'background-color': backgroundColor }">
+    <li *ngFor="let item of data" [ngStyle]="{'background-color': backgroundColor }">
+        <div class="drop-row">
+            <i class="fas fa-chevron-right icon" style="margin-right: 10px;" (click) = "toggleDropdown(item.name)" [ngClass]="{'rotate': isExpanded(item.name), 'hidden': (item.options.length == 0)}"></i>
+            <input type="checkbox" style="margin-right: 10px;" id="paramCheckbox" [checked] = "isSelected(item.category, item.name)" (change)
+="toggleSelection(item.category, item.name)" [disabled] = "!validParam(item) || (!isPPIncluded(item.category, 'name') && !isPPIncluded(item.category, 'code'))">
+            <span (click) = "toggleDropdown(item.name)">
+                <ng-container style="padding: 0px 10px;" *ngIf="item.name.toString().indexOf(',') != -1; else singleName"> {{ item.name[0] }} ({{item.name[1]}}) </ng-container>
+                <ng-template style="padding: 0px 10px;" #singleName> {{ item.name }} </ng-template>
+            </span>
+        </div>
+
+        <!-- name/code toggles for paired parameters -->
+        <div class="toggle-row" *ngIf="item.category == item.name[0] && isPairedParam(item.category)">
+            <mat-slide-toggle class="mat-slide-toggle" matTooltip="Include the corresponding descriptor for the code variable, or toggle to query only by code." (change)="onPPTogleChange('name', item.category, $event.checked)" [checked]="isPPIncluded(item.category, 'name')" [disabled]="!isSelected(item.category, item.name)">
+            </mat-slide-toggle>
+            <div class="label"> Include Name </div>
+            <mat-slide-toggle class="mat-slide-toggle" matTooltip="Select variable by code, e.g. '=03', or toggle to select by name, e.g. '=MEAT'" (change)="onPPTogleChange('code', item.category, $event.checked)" [checked]="isPPIncluded(item.category, 'code')"  [disabled]="!isSelected(item.category, item.name)">
+            </mat-slide-toggle>
+            <div class="label"> Query By Code </div>
+
+            <p *ngIf="!isPPIncluded(item.category, 'name') && !isPPIncluded(item.category, 'code')" style="color: red;"> At least one option must be selected </p>
+        </div>
+
+        <!-- If the current code is expanded, show the subsequent dropdown-->
+        <app-param-dropdown *ngIf="isExpanded(item.name)" style="left: 50px;" [level]="level + 1" [parentColor]="backgroundColor" [data]="item.options" [searchable_items] = "searchable_items" [dataset] = "dataset" [exports] = "exports" [paired_params]="paired_params"> </app-param-dropdown>
+    </li>
+</ul>

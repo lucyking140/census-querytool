@@ -1,0 +1,26 @@
+<!-- Loading Dialog (just the spinning icon)-->
+<div *ngIf ="type == 'loading'">
+    <div mat-dialog-content class="loading-dialog-content">
+        <mat-progress-spinner
+          class="example-margin"
+          [mode]="mode">
+        </mat-progress-spinner>
+      </div>
+ </div>
+
+ <!-- Error dialog -->
+ <div class="dialog-content" *ngIf="type == 'error'">
+    <h2 mat-dialog-title> Hm, it looks like there's been an error accessing the API. </h2>
+    <div mat-dialog-content class="dialog-content">
+      <p> Please modify your query or try again in a moment. </p>
+    </div>
+    <!-- Displaying a more detailed message -->
+    <div mat-dialog-content class="dialog-content">
+      <p *ngIf = "showMessage"> {{ message }} </p>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="toggleMessageOn()"> {{ errorButton }} </button>
+      <button mat-button (click)="onNoClick()">Close</button>
+    </div>
+
+ </div>

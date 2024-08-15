@@ -1,0 +1,94 @@
+/* src/app/dropdown/dropdown.component.css */
+.icon {
+  padding-left: 20px;
+}
+
+.icon.rotate {
+  transform: rotate(90deg) translateX(-10px);
+}
+
+.icon.hidden{
+  visibility: hidden;
+}
+
+.mat-slide-toggle {
+  transform: scale(0.6);
+  margin-right: 0;
+}
+
+.search-bar{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1000;
+}
+
+.example-form {
+  width: 100%;
+}
+
+.mat-form-field{
+  width: 100%;
+}
+
+.drop-row{
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding: 0px 10px;
+}
+
+.toggle-row{
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-right: 0px;
+  padding: 0px 30px;
+}
+
+.toggle-row label{
+  font-size: 14px;
+}
+
+.dropdown-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* ADDED */
+    /*margin-top: 100;*/
+
+  }
+  
+  .dropdown-menu > li {
+    padding: 8px;
+    background: #f1f1f1;
+    cursor: pointer;
+    position: relative;
+  }
+
+
+  .dropdown-menu > li:hover {
+    background: #ddd;
+  }
+  
+  .dropdown-menu > li > ul {
+    list-style-type: none;
+    padding: 0px 0px 20px 0px;
+    margin: 0;
+    display: none;
+    position: relative;
+    /*left: 20px;*/
+  }
+  
+  .dropdown-menu > li > ul > li {
+    padding: 8px;
+    background: #cae9f7; /*#f9f9f9;*/
+  }
+  
+  .dropdown-menu > li > ul > li:hover {
+    background: #eee;
+  }
+  
+  .dropdown-menu > li.expanded > ul {
+    display: block; /* Make the sub-menu visible */
+  }

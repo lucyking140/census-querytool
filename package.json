@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mat-table-exporter": "^10.2.4",
+    "ng": "^0.0.0",
+    "nvm": "^0.0.4",
+    "xlsx": "^0.18.5"
+  }
+}

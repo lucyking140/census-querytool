@@ -1,0 +1,315 @@
+/* The sidebar menu */
+.sidenav {
+    background-color: #c6e5f5; /*#accde9;*/
+    border-right: 1px solid #ddd;
+    width: 250px; /*20%; */
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 250px;
+  }
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.content{
+  flex: 1;
+  background-color: #fff;
+  overflow-y: auto;
+  padding: 100px;
+}
+
+.resizer {
+  width: 10px;
+  cursor: ew-resize;
+  background-color: #ddd;
+}
+
+.data-table {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #FDFBFF; /* to match mat-table */
+}
+
+.table-content{
+  margin-top: 50px;
+  /*border: 1px solid rgba(116, 118, 119, 0.15);
+  border-radius: 6px; */
+  overflow-x: auto;
+}
+
+.table-border{
+  border: 1px solid rgba(116, 118, 119, 0.15);
+  border-radius: 6px;
+}
+
+.apicall-box{
+  position: relative;
+  display: flex;
+  align-items: center;
+  appearance: none;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fdfdfdec;
+  color: #333;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.apicall-text{
+  max-width: 90%;
+  flex: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  margin-right: 8px;
+}
+
+.apicall-box i{
+  position: absolute;
+  flex-shrink: 0;
+  right: 8px;
+  top: 18px;
+}
+
+.apicall-box i:hover{
+  translate: 1px 1px;
+}
+
+  /* from https://getcssscan.com/css-buttons-examples */
+  .button {
+    appearance: none;
+    background-color: #FAFBFC;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: #24292E;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    list-style: none;
+    padding: 6px 16px;
+    position: relative;
+    transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    word-wrap: break-word;
+  }
+  
+  .button:hover {
+    background-color: #F3F4F6;
+    text-decoration: none;
+    transition-duration: 0.1s;
+  }
+  
+  .button:disabled {
+    background-color: #FAFBFC;
+    border-color: rgba(27, 31, 35, 0.15);
+    color: #959DA5;
+    cursor: default;
+  }
+  
+  .button:active {
+    background-color: #EDEFF2;
+    box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+    transition: none 0s;
+  }
+  
+  .button:focus {
+    outline: 1px transparent;
+  }
+  
+  .button:before {
+    display: none;
+  }
+  
+  .button:-webkit-details-marker {
+    display: none;
+  }
+
+.flex-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.row{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.row mat-radio-button {
+  margin-right: 20px;
+}
+
+.row p{
+  word-break: break-all;
+}
+
+.row label {
+  flex: 0 0 60px;
+  margin-right: 20px;
+}
+
+.row input[type="month"]{
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  color: #333;
+  width: 20%;
+  box-sizing: border-box;
+}
+
+.row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* DROPDOWN */
+.dropdown {
+ appearance: none;
+ position: relative;
+ flex: 1;
+}
+
+/* for version with ul-li */
+
+.dropdown-toggle {
+  position: relative;
+  appearance: none;
+  padding: 10px;
+  align-items: left;
+  font-size: 16px;
+  height: 45px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  color: #333;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.dropdown-toggle i{
+  position: absolute;
+  right: 10px;
+  bottom: 13px;
+}
+
+.dropdown-text{
+  position: absolute;
+  left: 18px;
+  bottom: 13px;
+}
+
+.dropdown-toggle i.rotate {
+  transform: rotate(90deg);
+}
+
+
+.dropdown-menu{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 50%;
+  font-size: 16px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  /* border-radius: 5px; */
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1000;
+}
+
+.dropdown-menu.show{
+  display: block;
+}
+
+.dropdown-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease-in-out;
+  list-style: none;
+}
+
+.dropdown-menu li:hover{
+  background-color: #e0e0e0;
+}
+
+/* for version with select */
+
+.dropdown select {
+  appearance: none;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  color: #333;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.dropdown select option {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+}
+
+.dropdown option:hover {
+  background-color: #e0e0e0;
+}
+
+#export-dropdown{
+  width: auto;
+  height: 45px;
+  min-width: 18ch;
+  background-color: none;
+  font-size: 14px;
+  padding: 0px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+#export-dropdown select:hover {
+  background-color: #F3F4F6;
+}
+
+.mat-form-field {
+  padding: 20px;
+}
+
+.mat-button {
+  background-color:#EBF2FA;
+}
+
+.mat-button:hover {
+  background-color: #EBF2FA/*#dde1e7; */
+}
+
+.mat-button:disabled{
+  background-color: #F3F4F6;
+  color: #959DA5;
+  cursor: default;
+}
