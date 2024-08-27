@@ -9,7 +9,7 @@ Create and activate a new conda environment. Then, in the querytool_start folder
 ### Angular
 
 conda install nodejs=18.19  
-npm i -g @angular/cli
+npm i -g @angular/cli  
 cd querytool  
 npm install  
 npm install xlsx
