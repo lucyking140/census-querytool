@@ -6,7 +6,7 @@ This tool allows users to submit parameters to generate an API call, then to sub
 
 Create and activate a new conda environment. Then, in the querytool_start folder, run the following commands:
 
-### Angular
+### To install Angular
 
 conda install nodejs=18.19  
 npm i -g @angular/cli  
@@ -14,7 +14,7 @@ cd querytool
 npm install  
 npm install xlsx
 
-### Flask
+### To install Flask
 
 conda install flask  
 conda install requests
