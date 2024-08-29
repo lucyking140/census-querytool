@@ -24,7 +24,7 @@ def process_codes(options):
     options = [options[i] for i in range(len(options)) if i not in te_ind]
 
     #sorting by code
-    print("String sorted options: ", sorted(options, key=lambda x: x[0]))
+    #print("String sorted options: ", sorted(options, key=lambda x: x[0]))
     return sorted(options, key=lambda x: x[0]), total_entries #int(x[0])
 
 """

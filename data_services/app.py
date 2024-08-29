@@ -18,7 +18,7 @@ tiered_param_lengths = {
     "E_ENDUSE": [1, 5],
     "NAICS": [2,3,4,6],
     "E_ENDUSE": [1, 5],
-    "I_COMMUNITY":[2,4,6,10],
+    "I_COMMODITY":[2,4,6,10], #CHANGED from I_COMMUNITY
     "I_ENDUSE": [1,5],
 }
 
@@ -34,6 +34,8 @@ exclude_params = [
 
 #params that don't have options ever -- mostly values. These are separated to increase efficiency, so
 # we aren't submitting API calls checking for these values
+# NOTE: this is not a comprehensive list and removing params from this list or having other non-included select-only params won't change the functionality
+# of the getAllParams methods, it just can shorten the Trade API call if we remove as many guaranteed select-only params as possible.
 select_only_params = [
     "CNT_WGT_YR",
     "CNT_VAL_MO",
@@ -111,13 +113,14 @@ def get_paired_params():
 
 """
 Gets all datasets given either imports or exports.
-"""
+NOT CURRENTLY IN USE
+
 @app.route('/datasets', methods=['GET'])
 def get_datasets(exports):
 
     exp = "exports" if exports else "imports"
     try:
-        response = requests.get(apiUrl + exp)
+        response = requests.get(apiUrl + exports)
         print("Reaching try")
         raise Exception("test exception")
     except Exception as e:
@@ -127,7 +130,7 @@ def get_datasets(exports):
     result = response["dataset"]["c_dataset"]
 
     return jsonify(result)
-
+"""
 
 """
 Handles collecting the list of variables and params shown in the sidebar dropdown
@@ -138,12 +141,12 @@ as listed above (see utils function)
 def get_all_params():
     startTime = time.time()    
     dataset = request.args.get('dataset')
-    exports = request.args.get('exports')
+    exp = request.args.get('exports') #CHANGED TO EXP from exports
     start = request.args.get('start') #year-month formate
     end = request.args.get('end')
     
     #print("Getting varibales from API: ", startTime - time.time())
-    exp = "exports" if exports else "imports"
+    #REMOVED -- exp = "exports" if exports else "imports"
     ## getting the list of variables overall
     try: 
         response = requests.get(apiUrl + exp + "/" + dataset + "/variables/")
@@ -222,7 +225,7 @@ def get_all_params():
                 flat_search_params.append(o)
             continue
 
-        if var[0] != "DISTRICT" and var[0] in paired_params:
+        if var[0] == "USDA" or var[0] == "STATE" or var[0] in paired_params:
             commodity_vars.append(var[0])
 
         # these are just separated to reduce the burden on the API call to make it faster
@@ -246,7 +249,10 @@ def get_all_params():
 
         #adding paired_param to the get-string
         if var[0] in commodity_vars:
-            comm_get_string += var[0] + "," + paired_params[var[0]][0] + ","
+            if var[0] == "USDA" or var[0] == "STATE":
+                comm_get_string += var[0] + ","
+            else:
+                comm_get_string += var[0] + "," + paired_params[var[0]][0] + ","
         else:
             if var[0] in paired_params.keys():
                 search_params = var[0]  + "," + paired_params[var[0]][0]
@@ -267,6 +273,7 @@ def get_all_params():
         print("Starting major API call: ", time.time() - startTime)
         try: 
             response = requests.get(apiUrl + exp + "/" + dataset + "?get=" + get_string + time_string + keyString)
+            print("API CALL: ", apiUrl + exp + "/" + dataset + "?get=" + get_string + time_string + keyString)
             response.raise_for_status()
             remaining_cols = response.json()
         except Exception as e:
@@ -277,6 +284,8 @@ def get_all_params():
         print("Ending major API call: ", time.time() - startTime)
 
     #making commodity API call -- we split this up to avoid overloading the API because the commodities are usually the vars with the most options
+    # this also allows us to identify which params have options later on, because the comm params 
+    # will never have values
     print("Starting comm API call: ", time.time() - startTime)
     if comm_get_string != "":
         try: 
@@ -321,40 +330,38 @@ def get_all_params():
                 shown_name = [var_name, paired_params[var[0]][0], desc]
 
             #getting all options for the given variable
-            if var[0] in variables:
-                opt_indices = [var_index[var[0]]]
-                if var[0] in paired_params: opt_indices.append(var_index[paired_params[var[0]][0]])
-                opt_indices.append(var_index["YEAR"])
-                opt_indices.append(var_index["MONTH"])
-                options = [[row[i] for i in opt_indices] for row in remaining_cols]
-            else: 
-                opt_indices = [com_var_index[var[0]]]
-                if var[0] in paired_params: opt_indices.append(com_var_index[paired_params[var[0]][0]])
-                opt_indices.append(com_var_index["YEAR"])
-                opt_indices.append(com_var_index["MONTH"])
-                options = [[row[i] for i in opt_indices] for row in commodity_cols]
-            
-            #checking if there is only one entry for the first date, meaning the var is a count, not an option
-            # this is necessary because we typically reduce list to only unique values other than month and year,
-            # but these vars have different annual values
-            hasOpts = False
-            for opt in options:
-                if opt != options[1] and (opt[len(opt)-2] == options[1][len(opt)-2] and opt[len(opt)-1] == options[1][len(opt)-1]):
-                    hasOpts = True
-                    print("opt found: ", opt)
-                    break
+            cur_cols = remaining_cols if var[0] in variables else commodity_cols
+            cur_var_index = var_index if var[0] in variables else com_var_index
 
-            #formatting options int our little list format
-            if not hasOpts:
-                options = []
-            else:
+            opt_indices = [cur_var_index[var[0]]]
+            if var[0] in paired_params: opt_indices.append(cur_var_index[paired_params[var[0]][0]])
+            opt_indices.append(cur_var_index["YEAR"])
+            opt_indices.append(cur_var_index["MONTH"])
+
+            #NOW need to check if there are multiple values for this variable, all other vars equal
+            # this allows us to identify parameters that have different values for dif times/options, but 
+            # don't actually have multiple selections
+            other_vars = [i for i in range(len(cur_cols[0])) if i not in opt_indices]
+            options = []
+            test_rows = []
+            hasOpts = False
+            for row in [[row[i] for i in other_vars] for row in cur_cols]:
+                if row in test_rows: #found a duplicate
+                    #test_rows.append(row)
+                    hasOpts = True
+                    break
+                test_rows.append(row)
+
+            #if len(test_rows) != len(cur_cols): #there are multiple unique options for this parameter --> include those options!
+            if hasOpts:
+                options = [[row[i] for i in opt_indices] for row in cur_cols]
                 options.pop(0) #removing the first entry (the label row)
                 #formatting sub_params into correct form -- removing month and year
                 new_opts = set()
                 for opt in options:
                     new_opts.add(tuple(opt[:-2]))
                 options = [list(subopt) for subopt in new_opts]
-
+            
             #accounting for params that return total value be default, not variables
             if len(options) == 1:
                 options = []
