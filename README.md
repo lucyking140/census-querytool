@@ -1,36 +1,6 @@
-# Query Builder tool for the International Trade API
+# Query builder tool for the International Trade API
 
 This tool allows users to submit parameters to generate an API call, then to submit the call and view the resulting data. It is supported by a Flask API to handle processing the parameters returned by the Trade API.
-
-# Installation
-
-Create and activate a new conda environment. Then, in the querytool_start folder, run the following commands:
-
-### To install Angular
-
-conda install nodejs=18.19  
-npm i -g @angular/cli  
-cd querytool  
-npm install  
-npm install xlsx
-
-### To install Flask
-
-conda install flask  
-conda install requests
-
-### Other Notes
-
-We've had the most luck when installing Angular in local drives. Certain network drives seem to prevent npm from accessing the correct package-lock.json file, and instead incorrectly default to a version in restricted C::/Windows folder. Angular also runs very, very slowly on the network drives, so for ease of use it is recommended to copy the querytool_start folder (without node_modules) into your local drive and follow these instructions there.
-
-# Opening the App
-
-Every time you access the app locally, you will need to open two terminals, one to run the Flask API in querytool_start/data_services and another in querytool_start/querytool to run the Angular frontend.
-
-Once in the correct directories with your conda environment activated, run the following commands:
-
-Angular frontend in querytool_start/querytool: ng serve  
-Flask API in querytool_start/data_services: flask --app app run
 
 # Structural Overview
 
