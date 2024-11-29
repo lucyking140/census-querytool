@@ -2,6 +2,8 @@
 
 This tool allows users to submit parameters to generate an API call, then to submit the call and view the resulting data. It is supported by a Flask API to handle processing the parameters returned by the Trade API.
 
+The US Census Bureau's International Trade API is a comprehensive resource for accessing import and export data across nine separate commodity classification systems, each with up to ten thousand commodity codes and hundreds of origin/destination trading partners. Because the API is frequently used by economists and policy writers unfamiliar with API call formatting, this query portal seeks to provide an accessible interface that pulls the currently-avaliable parameters from the API, formats a user's query, and provides the requested data.
+
 # Structural Overview
 
 ### Database Selection Component
